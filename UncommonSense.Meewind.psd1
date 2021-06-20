@@ -12,7 +12,7 @@
     RootModule        = 'UncommonSense.Meewind.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.0.1'
+    ModuleVersion     = '0.0.2'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -95,13 +95,13 @@
         PSData = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
-            # Tags = @()
+            Tags       = @('powershell', 'meewind', 'investments', 'funds')
 
             # A URL to the license for this module.
-            # LicenseUri = ''
+            LicenseUri = 'https://github.com/jhoek/UncommonSense.Meewind/blob/master/LICENSE'
 
             # A URL to the main website for this project.
-            # ProjectUri = ''
+            ProjectUri = 'https://github.com/jhoek/UncommonSense.Meewind'
 
             # A URL to an icon representing this module.
             # IconUri = ''
