@@ -12,7 +12,7 @@
     RootModule        = 'UncommonSense.Meewind.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.0.3'
+    ModuleVersion     = '0.0.4'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -51,7 +51,7 @@
     # ProcessorArchitecture = ''
 
     # Modules that must be imported into the global environment prior to importing this module
-    # RequiredModules = @()
+    RequiredModules = @('UncommonSense.Hap')
 
     # Assemblies that must be loaded prior to importing this module
     # RequiredAssemblies = @()
@@ -116,7 +116,7 @@
             # RequireLicenseAcceptance = $false
 
             # External dependent modules of this module
-            # ExternalModuleDependencies = @()
+            ExternalModuleDependencies = @('UncommonSense.Hap')
 
         } # End of PSData hashtable
 

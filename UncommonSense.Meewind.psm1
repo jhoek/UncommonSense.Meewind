@@ -6,17 +6,17 @@ function Get-MeewindFundPrice
 
     $DutchCulture = [CultureInfo]::GetCultureInfo('nl-NL')
 
-    $Content = Invoke-WebRequest -Uri 'https://meewind.nl/fondsen' | Select-Object -ExpandProperty Content
+    $Document = ConvertTo-HtmlDocument -Uri 'https://meewind.nl/fondsen'
 
-    $FundNames = $Content | pup '.fundblock .h4 text{}'
-    $FundPrices = $Content | pup '.fundblock .col-xs-6 .semibold:nth-child(2) text{}'
+    $FundNames = ($Document | Select-HtmlNode -CssSelector '.fundblock .h4' -All).InnerText
+    $FundPrices = ($Document | Select-HtmlNode -CssSelector '.fundblock .col-xs-6 .semibold:nth-child(2)' -All).InnerText
 
     0..($FundNames.Count - 1) | ForEach-Object {
         [PSCustomObject]@{
             PSTypeName = 'UncommonSense.Meewind.FundPrice'
             Date       = Get-Date
             Fund       = $FundNames[$_]
-            Price      = [decimal]::Parse(($FundPrices[$_] -replace '^€\s*', ''), $DutchCulture)
+            Price      = [decimal]::Parse(($FundPrices[$_] -replace '^\&euro\;\s*', ''), $DutchCulture)
         }
     }
 }
