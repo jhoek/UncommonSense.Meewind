@@ -6,17 +6,24 @@ function Get-MeewindFundPrice
 
     $DutchCulture = [CultureInfo]::GetCultureInfo('nl-NL')
 
-    $Document = ConvertTo-HtmlDocument -Uri 'https://meewind.nl/fondsen'
+    Invoke-WebRequest -Uri 'https://meewind.nl/fondsen'
+    | Select-Object -ExpandProperty Links
+    | Where-Object { $_.HRef }
+    | Select-Object -ExpandProperty HRef
+    | Where-Object { $_ -like 'https://meewind.nl/fonds/*' }
+    | Select-Object -Unique
+    | ForEach-Object {
+        $Document = ConvertTo-HtmlDocument -Uri $_
+        $Fund = $Document | Select-HtmlNode -CssSelector h2 | Get-HtmlNodeText
+        $DateText = ($Document | Select-HtmlNode -CssSelector '.fund-intrinsieke-waarde' | Get-HtmlNodeText -DirectInnerTextOnly) -replace '^Intrinsieke waarde \(', '' -replace '\):$', ''
+        $Date = [DateTime]::ParseExact($DateText, 'dd-MM-yyyy', $DutchCulture)
+        $PriceText = ($Document | Select-HtmlNode -CssSelector '.intrinsieke-waarde-1' | Get-HtmlNodeText) -replace '^€\s*', ''
 
-    $FundNames = ($Document | Select-HtmlNode -CssSelector '.fundblock .h4' -All).InnerText
-    $FundPrices = ($Document | Select-HtmlNode -CssSelector '.fundblock .col-xs-6 .semibold:nth-child(2)' -All).InnerText
-
-    0..($FundNames.Count - 1) | ForEach-Object {
         [PSCustomObject]@{
             PSTypeName = 'UncommonSense.Meewind.FundPrice'
-            Date       = Get-Date
-            Fund       = $FundNames[$_]
-            Price      = [decimal]::Parse(($FundPrices[$_] -replace '^\&euro\;\s*', ''), $DutchCulture)
+            Date       = $Date
+            Fund       = $Fund
+            Price      = [decimal]::Parse($PriceText, $DutchCulture)
         }
     }
 }
