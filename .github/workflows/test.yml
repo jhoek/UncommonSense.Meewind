@@ -14,6 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Invoke-Pester
-      - shell: pwsh
-      - run: Invoke-Pester -Output Detailed
-  
+        shell: pwsh
+        run: Invoke-Pester -Output Detailed
+
