@@ -13,7 +13,8 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+
       - name: Invoke-Pester
         shell: pwsh
         run: Invoke-Pester -Output Detailed
-
