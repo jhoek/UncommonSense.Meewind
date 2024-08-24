@@ -1,0 +1,19 @@
+name: test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+  schedule:
+  -  cron: '0 0 1 * *'
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Invoke-Pester
+      - shell: pwsh
+      - run: Invoke-Pester -Output Detailed
+  
