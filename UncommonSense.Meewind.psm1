@@ -15,7 +15,8 @@ function Get-MeewindFundPrice
     | ForEach-Object {
         $Document = ConvertTo-HtmlDocument -Uri $_
         $Fund = $Document | Select-HtmlNode -CssSelector h2 | Get-HtmlNodeText
-        $DateText = ($Document | Select-HtmlNode -CssSelector '.fund-intrinsieke-waarde' | Get-HtmlNodeText -DirectInnerTextOnly) -replace '^Intrinsieke waarde \(', '' -replace '\):$', ''
+        $IntrinsicValueItems = $Document | Select-HtmlNode -CssSelector '.intrinsieke-waarde-item' -All
+        $DateText = $IntrinsicValueItems | Select-Object -Skip 2 -First 1 | Get-HtmlNodeText -DirectInnerTextOnly
         $Date = [DateTime]::ParseExact($DateText, 'dd-MM-yyyy', $DutchCulture)
         $PriceText = ($Document | Select-HtmlNode -CssSelector '.intrinsieke-waarde-1' | Get-HtmlNodeText) -replace '^€\s*', ''
 
